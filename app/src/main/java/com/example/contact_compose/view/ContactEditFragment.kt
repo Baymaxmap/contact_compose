@@ -108,6 +108,8 @@ fun ContactEditScreen(navController: NavHostController, viewModel: ContactEditVi
                     label = { Text("Email") },
                     modifier = Modifier.fillMaxWidth()
                 )
+
+                //SAVE CONTACT
                 Spacer(modifier = Modifier.height(16.dp))
                 Button(onClick = {
                     // Tạo đối tượng Contact mới và truyền vào updateContact

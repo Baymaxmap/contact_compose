@@ -51,15 +51,15 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        //request permission to access media images
         requestStoragePermission()
         val factory = ContactViewModelFactory(app.contactRepository)
         setContent {
-            //Contact_composeTheme {
             MainScreen(factory)
         }
     }
 
-    // Xử lý kết quả yêu cầu quyền
+    // handle request permission
     private fun requestStoragePermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_MEDIA_IMAGES)
@@ -91,18 +91,15 @@ class MainActivity : ComponentActivity() {
 fun MainScreen(factory: ContactViewModelFactory){
     val navController = rememberNavController()
 
-    // Theo dõi trạng thái của NavBackStackEntry
+    // Get NavBackStackEntry
     val navBackStackEntry by navController.currentBackStackEntryAsState()
-    // Lấy route hiện tại
+    // Get current route
     val currentRoute = navBackStackEntry?.destination?.route
 
-    fun extractContactId(route: String?): Int {
-        return route?.substringAfter("contactDetail/")?.toIntOrNull() ?: 0
-    }
 
     Scaffold(
         topBar = {
-            //check if NavHost display which fragment?
+            //check NavHost display which fragment? -> display topBar corresponding with that
             when(currentRoute){
                 //ContactListScreen if NavHost display list
                 "contactList" ->
@@ -125,35 +122,53 @@ fun MainScreen(factory: ContactViewModelFactory){
                     )
 
                 //ContactDetailScreen if NavHost display detail contact
-                "contactDetail/{contactId}" -> TopAppBar(
-                    title = { Text(text = "Contact Detail")},
-                    navigationIcon = {
-                        IconButton(onClick = { navController.navigate(route = "contactList") }) {
-                            Icon(painter = painterResource(R.drawable.icon_back),
-                                contentDescription = "Menu contact"
-                            )
+                "contactDetail/{contactId}" ->
+                    TopAppBar(
+                        title = { Text(text = "Contact Detail")},
+                        navigationIcon = {
+                            IconButton(onClick = { navController.navigate(route = "contactList") }) {
+                                Icon(painter = painterResource(R.drawable.icon_back),
+                                    contentDescription = "Menu contact"
+                                )
+                            }
                         }
-                    }
-                )
+                    )
 
                 //ContactEditScreen if NavHost display edit contact
-                "contactEdit/{contactId}" -> TopAppBar(
-                    title = { Text(text = "Contact Edit")},
-                    navigationIcon = {
-                        IconButton(onClick = {
-                            val contactId = navBackStackEntry?.arguments?.getInt("contactId") ?: 0
-                            navController.navigate(route = "contactDetail/$contactId")
-                            //navController.popBackStack()
-                        }) {
-                            Icon(painter = painterResource(R.drawable.icon_back),
-                                contentDescription = ""
-                            )
+                "contactEdit/{contactId}" ->
+                    TopAppBar(
+                        title = { Text(text = "Contact Edit")},
+                        navigationIcon = {
+                            IconButton(onClick = {
+//                                val contactId = navBackStackEntry?.arguments?.getInt("contactId") ?: 0
+//                                navController.navigate(route = "contactDetail/$contactId")
+                                navController.popBackStack()
+                            }) {
+                                Icon(painter = painterResource(R.drawable.icon_back),
+                                    contentDescription = ""
+                                )
+                            }
                         }
-                    }
-                )
+                    )
+
+                //ContactAddScreen if NavHost display add contact
+                "contactAdd" ->
+                    TopAppBar(
+                        title = { Text(text = "Contact Add")},
+                        navigationIcon = {
+                            IconButton(onClick = {
+                                navController.popBackStack()    //Back to contactList
+                            }) {
+                                Icon(painter = painterResource(R.drawable.icon_back),
+                                    contentDescription = ""
+                                )
+                            }
+                        }
+                    )
             }
         }
     ) {paddingValues ->
+        //Box to contain NavHost (list of contacts, detail contact, add contact, edit contact)
         Box(modifier = Modifier.padding(paddingValues)){
             ContactNavHost(navController = navController, viewModelFactory = factory)
         }

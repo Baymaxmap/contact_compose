@@ -40,15 +40,17 @@ fun ContactListScreen(
     navController: NavHostController,
     viewModel: ContactListViewModel
 ) {
-    LaunchedEffect(Unit) {
+    //contacts as a state, contacts change -> composable components recompose, launchedEffect called
+    val contacts by viewModel.contacts.observeAsState(emptyList())
+    LaunchedEffect(contacts) {
         viewModel.fetchContacts()
     }
-    val contacts by viewModel.contacts.observeAsState(emptyList())
 
     Box(modifier = Modifier.fillMaxSize()) {
         // Recycler view
         LazyColumn(modifier = Modifier.fillMaxSize()) {
             items(contacts) { contact ->
+                //display each item
                 ContactItem(contact = contact, onClick = {
                     navController.navigate("contactDetail/${contact.id}")
                 })
@@ -80,11 +82,11 @@ fun ContactItem(contact: Contact, onClick: () -> Unit) {
         GlideImage(
             imagePath = contact.avatar,
             modifier = Modifier
-                .size(40.dp)
+                .size(60.dp)
                 .clip(CircleShape)
         )
 
-        Spacer(modifier = Modifier.width(16.dp))
+        Spacer(modifier = Modifier.width(30.dp))
 
         // Hiển thị tên liên hệ
         Text(
