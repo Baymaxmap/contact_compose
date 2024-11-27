@@ -50,5 +50,11 @@ fun ContactNavHost(navController: NavHostController, viewModelFactory: ContactVi
             val viewModel: ContactAddViewModel = viewModel(factory = viewModelFactory)
             ContactAddScreen(navController, viewModel)
         }
+
+        //ContactSearchScreen
+        composable("contactSearch") {
+            val viewModel: ContactListViewModel = viewModel(factory = viewModelFactory)
+            ContactSearchScreen(navController = navController, viewModel = viewModel)
+        }
     }
 }

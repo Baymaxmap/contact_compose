@@ -106,7 +106,7 @@ fun MainScreen(factory: ContactViewModelFactory){
                     TopAppBar(
                         title = { Text(text = "Contacts")},
                         actions = {
-                            IconButton(onClick = {/* click search icon */}) {
+                            IconButton(onClick = {navController.navigate("contactSearch")}) {
                                 Icon(painter = painterResource(R.drawable.icon_search),
                                     contentDescription = "Search contact"
                                 )
