@@ -21,6 +21,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -39,6 +40,9 @@ fun ContactListScreen(
     navController: NavHostController,
     viewModel: ContactListViewModel
 ) {
+    LaunchedEffect(Unit) {
+        viewModel.fetchContacts()
+    }
     val contacts by viewModel.contacts.observeAsState(emptyList())
 
     Box(modifier = Modifier.fillMaxSize()) {
