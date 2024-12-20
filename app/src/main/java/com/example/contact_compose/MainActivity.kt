@@ -43,19 +43,19 @@ import com.example.contact_compose.application.ContactApp
 import com.example.contact_compose.ui.theme.Contact_composeTheme
 import com.example.contact_compose.view.ContactNavHost
 import com.example.contact_compose.viewmodel.factory.ContactViewModelFactory
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     private val REQUEST_CODE = 1001
-    private val app by lazy { application as ContactApp }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         //request permission to access media images
         requestStoragePermission()
-        val factory = ContactViewModelFactory(app.contactRepository)
         setContent {
-            MainScreen(factory)
+            MainScreen()
         }
     }
 
@@ -88,7 +88,7 @@ class MainActivity : ComponentActivity() {
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen(factory: ContactViewModelFactory){
+fun MainScreen(){
     val navController = rememberNavController()
 
     // Get NavBackStackEntry
@@ -140,8 +140,6 @@ fun MainScreen(factory: ContactViewModelFactory){
                         title = { Text(text = "Contact Edit")},
                         navigationIcon = {
                             IconButton(onClick = {
-//                                val contactId = navBackStackEntry?.arguments?.getInt("contactId") ?: 0
-//                                navController.navigate(route = "contactDetail/$contactId")
                                 navController.popBackStack()
                             }) {
                                 Icon(painter = painterResource(R.drawable.icon_back),
@@ -170,7 +168,7 @@ fun MainScreen(factory: ContactViewModelFactory){
     ) {paddingValues ->
         //Box to contain NavHost (list of contacts, detail contact, add contact, edit contact)
         Box(modifier = Modifier.padding(paddingValues)){
-            ContactNavHost(navController = navController, viewModelFactory = factory)
+            ContactNavHost(navController = navController)
         }
     }
 }

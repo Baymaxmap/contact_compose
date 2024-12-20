@@ -6,11 +6,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.contact_compose.model.Contact
 import com.example.contact_compose.model.repository.ContactRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class ContactListViewModel(private val _repository: ContactRepository): ViewModel() {
+@HiltViewModel
+class ContactListViewModel @Inject constructor(private val _repository: ContactRepository): ViewModel() {
     //attributes for display list of contact on UI
     private val _contacts: MutableLiveData<List<Contact>> = MutableLiveData()
     val contacts: LiveData<List<Contact>>

@@ -1,6 +1,7 @@
 package com.example.contact_compose.view
 
 import androidx.compose.runtime.Composable
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
@@ -15,13 +16,13 @@ import com.example.contact_compose.viewmodel.ContactListViewModel
 import com.example.contact_compose.viewmodel.factory.ContactViewModelFactory
 
 @Composable
-fun ContactNavHost(navController: NavHostController, viewModelFactory: ContactViewModelFactory) {
+fun ContactNavHost(navController: NavHostController) {
 
     NavHost(navController, startDestination = "contactList") {
 
         //ContactListScreen begin
         composable("contactList") {
-            val viewModel: ContactListViewModel = viewModel(factory = viewModelFactory)
+            val viewModel: ContactListViewModel = hiltViewModel()
             ContactListScreen(navController, viewModel)
         }
 
@@ -31,7 +32,7 @@ fun ContactNavHost(navController: NavHostController, viewModelFactory: ContactVi
             arguments = listOf(navArgument("contactId") { type = NavType.IntType })
         ) { backStackEntry ->
             val contactId = backStackEntry.arguments?.getInt("contactId") ?: 0
-            val viewModel: ContactDetailViewModel = viewModel(factory = viewModelFactory)
+            val viewModel: ContactDetailViewModel = hiltViewModel()
             ContactDetailScreen(navController,viewModel, contactId)
         }
 
@@ -41,19 +42,19 @@ fun ContactNavHost(navController: NavHostController, viewModelFactory: ContactVi
             arguments = listOf(navArgument("contactId") { type = NavType.IntType })
         ) { backStackEntry ->
             val contactId = backStackEntry.arguments?.getInt("contactId") ?: 0
-            val viewModel: ContactEditViewModel = viewModel(factory = viewModelFactory)
+            val viewModel: ContactEditViewModel = hiltViewModel()
             ContactEditScreen(navController, viewModel, contactId)
         }
 
         //ContactAddScreen
         composable("contactAdd") {
-            val viewModel: ContactAddViewModel = viewModel(factory = viewModelFactory)
+            val viewModel: ContactAddViewModel = hiltViewModel()
             ContactAddScreen(navController, viewModel)
         }
 
         //ContactSearchScreen
         composable("contactSearch") {
-            val viewModel: ContactListViewModel = viewModel(factory = viewModelFactory)
+            val viewModel: ContactListViewModel = hiltViewModel()
             ContactSearchScreen(navController = navController, viewModel = viewModel)
         }
     }

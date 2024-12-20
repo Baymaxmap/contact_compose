@@ -3,9 +3,10 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     id("androidx.navigation.safeargs.kotlin")
-    id("com.google.devtools.ksp") version "2.0.21-1.0.25"
+    id("com.google.devtools.ksp") version "2.0.0-1.0.21"
     id("kotlin-parcelize")
     id("kotlin-kapt")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -77,12 +78,30 @@ dependencies {
     // Navigation for Compose
     implementation("androidx.navigation:navigation-compose:2.8.4")
 
+    //KSP
     // Room dependencies
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
-    ksp("androidx.room:room-compiler:2.6.1") // Replace annotationProcessor with ksp
+    ksp(libs.androidx.room.compiler) // Replace annotationProcessor with ksp
 
     // Glide
-    implementation("com.github.bumptech.glide:glide:4.15.1")
-    ksp("com.github.bumptech.glide:compiler:4.15.1")
+    implementation(libs.glide)
+    ksp(libs.compiler)
+
+    //HILT USING KAPT
+    //Hilt Dependency Injection
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
+
+    // ViewModel & Hilt Integration
+    //implementation(libs.androidx.hilt.lifecycle.viewmodel)
+    //kapt(libs.androidx.hilt.compiler)
+
+    // Jetpack Navigation with Hilt
+    implementation(libs.androidx.hilt.navigation.compose)
+
+}
+
+kapt {
+    correctErrorTypes = true
 }

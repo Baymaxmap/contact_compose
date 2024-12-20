@@ -7,11 +7,14 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.contact_compose.model.Contact
 import com.example.contact_compose.model.repository.ContactRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class ContactDetailViewModel(private val repository: ContactRepository) : ViewModel() {
+@HiltViewModel
+class ContactDetailViewModel @Inject constructor(private val repository: ContactRepository) : ViewModel() {
     private val _contact = MutableLiveData<Contact>()
     val contact: LiveData<Contact>
         get() = _contact

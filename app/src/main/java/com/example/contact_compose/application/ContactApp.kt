@@ -4,18 +4,19 @@ import android.app.Application
 import com.example.contact_compose.model.Contact
 import com.example.contact_compose.model.database.AppDatabase
 import com.example.contact_compose.model.repository.ContactRepository
+import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
+@HiltAndroidApp
 class ContactApp : Application() {
-    private lateinit var _database: AppDatabase
+    @Inject
     lateinit var contactRepository: ContactRepository
 
     override fun onCreate() {
         super.onCreate()
-        _database = AppDatabase.getDatabase(this)
-        contactRepository = ContactRepository(_database.contactDao())
 
         // Initialize data only if it's the first run
         if (isFirstRun()) {
